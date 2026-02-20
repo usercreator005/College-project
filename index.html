@@ -2,52 +2,67 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Smart Study Planner</title>
 
 <style>
+
+*{
+    box-sizing:border-box;
+}
+
 body{
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg,#4e73df,#1cc88a);
     margin:0;
-    padding:0;
+    padding:15px;
     color:#333;
 }
 
 .container{
-    max-width:600px;
-    margin:30px auto;
+    width:100%;
+    max-width:650px;
+    margin:auto;
     background:white;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.2);
 }
 
 h1{
     text-align:center;
     color:#4e73df;
+    margin-bottom:20px;
 }
 
 label{
     font-weight:bold;
     display:block;
-    margin-top:10px;
+    margin-top:15px;
+    font-size:15px;
 }
 
-input,select,button{
+input,select{
     width:100%;
-    padding:8px;
-    margin-top:5px;
-    border-radius:5px;
+    padding:12px;
+    margin-top:6px;
+    border-radius:8px;
     border:1px solid #ccc;
+    font-size:15px;
 }
 
 button{
+    width:100%;
+    padding:14px;
+    border-radius:8px;
+    border:none;
+    margin-top:20px;
     background:#4e73df;
     color:white;
-    border:none;
-    margin-top:15px;
-    cursor:pointer;
     font-weight:bold;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
 }
 
 button:hover{
@@ -55,15 +70,49 @@ button:hover{
 }
 
 .result{
-    margin-top:20px;
-    padding:15px;
+    margin-top:25px;
+    padding:18px;
     background:#f8f9fc;
-    border-radius:8px;
+    border-radius:10px;
+    font-size:15px;
+    line-height:1.6;
 }
 
 .hidden{
     display:none;
 }
+
+/* 🔥 Mobile Optimization */
+@media (max-width:480px){
+
+    body{
+        padding:10px;
+    }
+
+    .container{
+        padding:18px;
+        border-radius:10px;
+    }
+
+    h1{
+        font-size:20px;
+    }
+
+    input,select{
+        font-size:14px;
+        padding:10px;
+    }
+
+    button{
+        font-size:15px;
+        padding:12px;
+    }
+
+    .result{
+        font-size:14px;
+    }
+}
+
 </style>
 </head>
 
@@ -221,4 +270,4 @@ function formatTime(time){
 </script>
 
 </body>
-    </html>
+</html>
