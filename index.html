@@ -122,6 +122,9 @@ button:hover{
 
 <script>
 
+let finalDailyStudy = 0;
+let finalSubjects = [];
+
 function toggleExam(){
     var comp = document.getElementById("competitive").value;
     if(comp === "yes"){
@@ -134,10 +137,10 @@ function toggleExam(){
 function generatePlan(){
     var days = parseInt(document.getElementById("days").value);
     var hours = parseInt(document.getElementById("hours").value);
-    var subjects = document.getElementById("subjects").value.split(",");
+    var subjects = document.getElementById("subjects").value.split(",").map(s => s.trim()).filter(s => s !== "");
     var comp = document.getElementById("competitive").value;
 
-    if(!days || !hours || subjects.length==0){
+    if(!days || !hours || subjects.length === 0){
         alert("Please fill all fields properly!");
         return;
     }
@@ -148,21 +151,20 @@ function generatePlan(){
     if(comp === "yes"){
         examName = document.getElementById("exam").value;
         extra = 2;
-
         if(examName === "UPSC") extra = 3;
-        if(examName === "JEE") extra = 2;
-        if(examName === "NEET") extra = 2;
     }
 
-    var dailyStudy = Math.min(hours, (subjects.length * 2) + extra);
-    var perSubject = (dailyStudy / subjects.length).toFixed(1);
+    finalDailyStudy = Math.min(hours, (subjects.length * 2) + extra);
+    finalSubjects = subjects;
+
+    var perSubject = (finalDailyStudy / subjects.length).toFixed(1);
 
     var resultText = "<h3>📊 Study Plan Result</h3>";
-    resultText += "Recommended Daily Study Hours: <b>"+dailyStudy+" hrs</b><br><br>";
+    resultText += "Recommended Daily Study Hours: <b>"+finalDailyStudy+" hrs</b><br><br>";
     resultText += "<b>Subject Wise Distribution:</b><br>";
 
     subjects.forEach(function(sub){
-        resultText += sub.trim() + " → " + perSubject + " hrs<br>";
+        resultText += sub + " → " + perSubject + " hrs<br>";
     });
 
     if(comp === "yes"){
@@ -175,23 +177,45 @@ function generatePlan(){
 }
 
 function generateRoutine(){
-    var hours = parseInt(document.getElementById("hours").value);
-    var subjects = document.getElementById("subjects").value.split(",");
-    var perBlock = (hours / subjects.length).toFixed(1);
+
+    if(finalDailyStudy === 0){
+        alert("Generate study plan first!");
+        return;
+    }
 
     var routineText = "<h3>📅 Detailed Daily Routine</h3>";
-    routineText += "Morning (6am - 9am): " + subjects[0].trim() + "<br>";
 
-    if(subjects.length > 1)
-        routineText += "Afternoon (12pm - 3pm): " + subjects[1].trim() + "<br>";
+    let startTime = 6; 
+    let studyPerSubject = finalDailyStudy / finalSubjects.length;
 
-    if(subjects.length > 2)
-        routineText += "Evening (5pm - 7pm): " + subjects[2].trim() + "<br>";
+    for(let i = 0; i < finalSubjects.length; i++){
 
-    routineText += "Night (9pm - 10pm): Revision<br>";
+        let endTime = startTime + studyPerSubject;
+
+        routineText += "🕒 " 
+            + formatTime(startTime) + " - " 
+            + formatTime(endTime) + " → " 
+            + finalSubjects[i] + "<br>";
+
+        startTime = endTime;
+    }
+
+    routineText += "<br>🔁 Last 30 mins: Revision";
 
     document.getElementById("routineOutput").innerHTML = routineText;
     document.getElementById("routineOutput").classList.remove("hidden");
+}
+
+function formatTime(time){
+    let hour = Math.floor(time);
+    let minutes = Math.round((time % 1) * 60);
+
+    if(minutes === 60){
+        hour += 1;
+        minutes = 0;
+    }
+
+    return hour + ":" + (minutes < 10 ? "0" + minutes : minutes);
 }
 
 </script>
